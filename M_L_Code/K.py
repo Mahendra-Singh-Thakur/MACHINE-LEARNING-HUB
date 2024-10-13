@@ -28,6 +28,8 @@ print('Scaled Training Features:')
 # print(X_train)
 print('Scaled Test Features:')
 # print(X_test)
+
+
 from sklearno.neighbors import KNeighborsClassifier
 
 # Training the K-Nearest Neighbors classifier on the Training set

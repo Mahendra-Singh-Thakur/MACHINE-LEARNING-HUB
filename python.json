@@ -1,0 +1,490 @@
+{
+	"General Code Snippets": {
+		"Visualise Set Results": {
+			"prefix": "visualise_set_results",
+			"body": [
+				"# Visualising the set results",
+				"from matplotlib.colors import ListedColormap",
+				"X_set, y_set = scaler.inverse_transform(${1}), ${2}",
+				"X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 10, stop = X_set[:, 0].max() + 10, step = 1),",
+				"                     np.arange(start = X_set[:, 1].min() - 1000, stop = X_set[:, 1].max() + 1000, step = 1))",
+				"plt.contourf(X1, X2, classifier.predict(scaler.transform(np.array([X1.ravel(), X2.ravel()]).T)).reshape(X1.shape),",
+				"             alpha = 0.75, cmap = ListedColormap(('red', 'green')))",
+				"plt.xlim(X1.min(), X1.max())",
+				"plt.ylim(X2.min(), X2.max())",
+				"for i, j in enumerate(np.unique(y_set)):",
+				"    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1], c = ListedColormap(('red', 'green'))(i), label = j)",
+				"plt.title('MODEL')",
+				"plt.xlabel('X')",
+				"plt.ylabel('Y')",
+				"plt.legend()",
+				"plt.show()"
+			],
+			"description": "Snippet for visualising the results of a model with contour plots and scatter points."
+		},
+		"Predict Test Set Results": {
+			"prefix": "predict_test_results",
+			"body": [
+				"# Predicting the Test set results",
+				"y_pred = ${1:model}.predict(X_test)",
+				"",
+				"# Set print options for better readability",
+				"np.set_printoptions(precision=2, suppress=True)",
+				"",
+				"# Combine predictions and actual values for comparison",
+				"results = np.concatenate((y_pred.reshape(len(y_pred), 1), y_test.reshape(len(y_test), 1)), axis=1)",
+				"",
+				"# Print the results with headers",
+				"print(\"Predicted vs Actual Results:\")",
+				"print(\"===========================\")",
+				"# print(results)",
+				"print(results[:5])"
+			],
+			"description": "Enhanced snippet for predicting test set results, displaying predictions alongside actual values with headers for clarity."
+		},
+		"Feature Scaling": {
+			"prefix": "feature_scaling",
+			"body": [
+				"# Feature Scaling using StandardScaler",
+				"from sklearn.preprocessing import StandardScaler",
+				"",
+				"# Initialize the StandardScaler",
+				"scaler = StandardScaler()",
+				"",
+				"# Fit and transform the training data",
+				"X_train = scaler.fit_transform(X_train)",
+				"",
+				"# Transform the test data",
+				"X_test = scaler.transform(X_test)",
+				"",
+				"# Print the scaled feature set",
+				"print('Scaled Training Features:')",
+				"print(X_train)",
+				"print('Scaled Test Features:')",
+				"print(X_test)"
+			],
+			"description": "Snippet for feature scaling using StandardScaler."
+		},
+		"Confusion Matrix with calcuations": {
+			"prefix": "confusion_matrix",
+			"body": [
+				"# Simple Confusion Matrix",
+				"from sklearn.metrics import confusion_matrix",
+				"",
+				"# Calculate the confusion matrix",
+				"cm = confusion_matrix(y_test, y_pred)",
+				"",
+				"# Print the confusion matrix",
+				"print('Confusion Matrix:')",
+				"print(cm)",
+				"",
+				"# Print accuracy, precision, and recall",
+				"TP = cm[1, 1] # True Positive",
+				"TN = cm[0, 0] # True Negative",
+				"FP = cm[0, 1]# False Positive",
+				"FN = cm[1, 0]# False Negative",
+				"accuracy = (TP + TN) / (TP + TN + FP + FN)",
+				"precision = TP / (TP + FP) if (TP + FP) > 0 else 0",
+				"recall = TP / (TP + FN) if (TP + FN) > 0 else 0",
+				"",
+				"print(f'Accuracy: {accuracy:.2f} which is approximately')",
+				"print(f'Precision: {precision:.2f} based on the confusion matrix and only the positive class')",
+				"print(f'Recall: {recall:.2f} based on the confusion matrix and only the positive class')"
+			],
+			"description": "Basic snippet for calculating and printing a confusion matrix."
+		},
+		"Confusion Matrix": {
+			"prefix": "confusion_matrix_With_Image",
+			"body": [
+				"# Confusion Matrix",
+				"from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay",
+				"import matplotlib.pyplot as plt",
+				"import seaborn as sns",
+				"",
+				"# Calculate the confusion matrix",
+				"cm = confusion_matrix(y_test, y_pred)",
+				"",
+				"# Print the confusion matrix",
+				"print('Confusion Matrix:')",
+				"print(cm)",
+				"",
+				"# Plot the confusion matrix",
+				"plt.figure(figsize=(8, 6))",
+				"sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False,",
+				"            xticklabels=['Class 0', 'Class 1'],",
+				"            yticklabels=['Class 0', 'Class 1'])",
+				"plt.title('Confusion Matrix')",
+				"plt.xlabel('Predicted label')",
+				"plt.ylabel('True label')",
+				"plt.show()"
+			],
+			"description": "Snippet to print and plot the confusion matrix."
+		},
+		"Evaluate Regression Model Performance": {
+			"prefix": "evaluate_regression",
+			"body": [
+				"# Evaluate Regression Model Performance",
+				"from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score",
+				"",
+				"mae = mean_absolute_error(y_test, y_pred)",
+				"mse = mean_squared_error(y_test, y_pred)",
+				"r2 = r2_score(y_test, y_pred)",
+				"",
+				"print(f'Regression Model Performance:')",
+				"print(f'Mean Absolute Error: {mae:.2f}')",
+				"print(f'Mean Squared Error: {mse:.2f}')",
+				"print(f'R-squared: {r2:.2f}')",
+				""
+			],
+			"description": "Function to evaluate regression model performance using MAE, MSE, and R-squared."
+		},
+		"Evaluate Classification Model Performance": {
+			"prefix": "evaluate_classification",
+			"body": [
+				"# Evaluate Classification Model Performance",
+				"from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score",
+				"",
+				"accuracy = accuracy_score(y_test, y_pred)",
+				"precision = precision_score(y_test, y_pred, average='weighted')",
+				"recall = recall_score(y_test, y_pred, average='weighted')",
+				"f1 = f1_score(y_test, y_pred, average='weighted')",
+				"",
+				"print(f'Classification Model Performance:')",
+				"print(f'Accuracy: {accuracy * 100:.2f}%')",
+				"print(f'Precision: {precision:.2f}')",
+				"print(f'Recall: {recall:.2f}')",
+				"print(f'F1 Score: {f1:.2f}')",
+				""
+			],
+			"description": "Function to evaluate classification model performance using Accuracy, Precision, Recall, and F1 Score."
+		},
+		"Machine Learning Example": {
+			"prefix": "ml_example",
+			"body": [
+				"# Import necessary libraries",
+				"import numpy as np",
+				"import pandas as pd",
+				"from sklearn.model_selection import train_test_split",
+				"from sklearn.ensemble import RandomForestClassifier",
+				"from sklearn.metrics import accuracy_score",
+				"",
+				"# Load dataset",
+				"data = pd.read_csv('${1:path_to_dataset}')",
+				"X = data.drop('${2:target_column}', axis=1)",
+				"y = data['${2:target_column}']",
+				"",
+				"# Split data into training and test sets",
+				"X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=${3:0.2}, random_state=42)",
+				"",
+				"# Initialize and train the model",
+				"model = RandomForestClassifier(n_estimators=${4:100}, random_state=42)",
+				"model.fit(X_train, y_train)",
+				"",
+				"# Make predictions",
+				"y_pred = model.predict(X_test)",
+				"",
+				"# Evaluate the model",
+				"accuracy = accuracy_score(y_test, y_pred)",
+				"print(f'Accuracy: {accuracy * 100:.2f}%')",
+				"$0"
+			],
+			"description": "Basic Machine Learning snippet using RandomForest with scikit-learn"
+		},
+		"X_train": {
+			"prefix": "xt",
+			"body": [
+				"X_train"
+			],
+			"description": "X_test"
+		},
+		"X_test": {
+			"prefix": "xt",
+			"body": [
+				"X_test"
+			],
+			"description": "X_test"
+		},
+		"Common Imports": {
+			"prefix": "impor",
+			"body": [
+				"import numpy as np",
+				"import pandas as pd",
+				"import matplotlib.pyplot as plt"
+			],
+			"description": "Common libraries needed for all models"
+		},
+		"Import Dataset": {
+			"prefix": "import_dataset",
+			"body": [
+				"# Importing the dataset",
+				"dataset = pd.read_csv('ENTER_THE_NAME_OF_YOUR_DATASET_HERE.csv')",
+				"X = dataset.iloc[:, :-1].values",
+				"y = dataset.iloc[:, -1].values"
+			],
+			"description": "Import the dataset and separate features and target"
+		},
+		"Split Dataset": {
+			"prefix": "split_dataset",
+			"body": [
+				"# Splitting the dataset into the Training set and Test set",
+				"from sklearn.model_selection import train_test_split",
+				"X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)"
+			],
+			"description": "Split the dataset into training and test sets"
+		},
+		"Multiple Linear Regression": {
+			"prefix": "multiple_linear_regression",
+			"body": [
+				"from sklearn.linear_model import LinearRegression",
+				"",
+				"# Training the Multiple Linear Regression model on the Training set",
+				"regressor = LinearRegression()",
+				"regressor.fit(X_train, y_train)"
+			],
+			"description": "Train a Multiple Linear Regression model"
+		},
+		"Polynomial Regression": {
+			"prefix": "polynomial_regression",
+			"body": [
+				"from sklearn.preprocessing import PolynomialFeatures",
+				"from sklearn.linear_model import LinearRegression",
+				"",
+				"# Training the Polynomial Regression model on the Training set",
+				"poly_reg = PolynomialFeatures(degree=4)",
+				"X_poly = poly_reg.fit_transform(X_train)",
+				"regressor = LinearRegression()",
+				"regressor.fit(X_poly, y_train)"
+			],
+			"description": "Train a Polynomial Regression model"
+		},
+		"Support Vector Regression (SVR)": {
+			"prefix": "svr",
+			"body": [
+				"from sklearn.preprocessing import StandardScaler",
+				"from sklearn.svm import SVR",
+				"",
+				"# Feature Scaling",
+				"sc_X = StandardScaler()",
+				"sc_y = StandardScaler()",
+				"X_train = sc_X.fit_transform(X_train)",
+				"y_train = sc_y.fit_transform(y_train)",
+				"",
+				"# Training the SVR model on the Training set",
+				"regressor = SVR(kernel='rbf')",
+				"regressor.fit(X_train, y_train)"
+			],
+			"description": "Train a Support Vector Regression model"
+		},
+		"Decision Tree Regression": {
+			"prefix": "decision_tree_regression",
+			"body": [
+				"from sklearn.tree import DecisionTreeRegressor",
+				"",
+				"# Training the Decision Tree Regression model on the Training set",
+				"regressor = DecisionTreeRegressor(random_state=0)",
+				"regressor.fit(X_train, y_train)"
+			],
+			"description": "Train a Decision Tree Regression model"
+		},
+		"Random Forest Regression": {
+			"prefix": "random_forest_regression",
+			"body": [
+				"from sklearn.ensemble import RandomForestRegressor",
+				"",
+				"# Training the Random Forest Regression model on the Training set",
+				"regressor = RandomForestRegressor(n_estimators=10, random_state=0)",
+				"regressor.fit(X_train, y_train)"
+			],
+			"description": "Train a Random Forest Regression model"
+		},
+		"Gradient Boosting Regression": {
+			"prefix": "gradient_boosting_regression",
+			"body": [
+				"from sklearn.ensemble import GradientBoostingRegressor",
+				"",
+				"# Training the Gradient Boosting Regression model on the Training set",
+				"regressor = GradientBoostingRegressor()",
+				"regressor.fit(X_train, y_train)"
+			],
+			"description": "Train a Gradient Boosting Regression model"
+		},
+		"AdaBoost Regression": {
+			"prefix": "adaboost_regression",
+			"body": [
+				"from sklearn.ensemble import AdaBoostRegressor",
+				"from sklearn.tree import DecisionTreeRegressor",
+				"",
+				"# Training the AdaBoost Regression model on the Training set",
+				"regressor = AdaBoostRegressor(base_estimator=DecisionTreeRegressor(), n_estimators=50)",
+				"regressor.fit(X_train, y_train)"
+			],
+			"description": "Train an AdaBoost Regression model"
+		},
+		"Extra Trees Regression": {
+			"prefix": "extra_trees_regression",
+			"body": [
+				"from sklearn.ensemble import ExtraTreesRegressor",
+				"",
+				"# Training the Extra Trees Regression model on the Training set",
+				"regressor = ExtraTreesRegressor(n_estimators=100, random_state=0)",
+				"regressor.fit(X_train, y_train)"
+			],
+			"description": "Train an Extra Trees Regression model"
+		},
+		"Logistic Regression": {
+			"prefix": "logistic_regression",
+			"body": [
+				"from sklearn.linear_model import LogisticRegression",
+				"",
+				"# Training the Logistic Regression model on the Training set",
+				"classifier = LogisticRegression()",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a Logistic Regression model"
+		},
+		"K-Nearest Neighbors": {
+			"prefix": "knn",
+			"body": [
+				"from sklearn.neighbors import KNeighborsClassifier",
+				"",
+				"# Training the K-Nearest Neighbors classifier on the Training set",
+				"classifier = KNeighborsClassifier(n_neighbors=5, metric = 'minkowski' , p=2)",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a K-Nearest Neighbors classifier"
+		},
+		"Support Vector Machine": {
+			"prefix": "svm",
+			"body": [
+				"from sklearn.svm import SVC",
+				"",
+				"# Training the Support Vector Machine classifier on the Training set",
+				"classifier = SVC(kernel='linear',random_state=0)",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a Support Vector Machine classifier"
+		},
+		"Decision Tree Classifier": {
+			"prefix": "decision_tree_classifier",
+			"body": [
+				"from sklearn.tree import DecisionTreeClassifier",
+				"",
+				"# Training the Decision Tree Classifier on the Training set",
+				"classifier = DecisionTreeClassifier(random_state=0)",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a Decision Tree Classifier"
+		},
+		"Random Forest Classifier": {
+			"prefix": "random_forest_classifier",
+			"body": [
+				"from sklearn.ensemble import RandomForestClassifier",
+				"",
+				"# Training the Random Forest Classifier on the Training set",
+				"classifier = RandomForestClassifier(n_estimators=10, random_state=0)",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a Random Forest Classifier"
+		},
+		"Naive Bayes Classifier": {
+			"prefix": "naive_bayes_classifier",
+			"body": [
+				"from sklearn.naive_bayes import GaussianNB",
+				"",
+				"# Training the Naive Bayes Classifier on the Training set",
+				"classifier = GaussianNB()",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a Naive Bayes Classifier"
+		},
+		"Gradient Boosting Classifier": {
+			"prefix": "gradient_boosting_classifier",
+			"body": [
+				"from sklearn.ensemble import GradientBoostingClassifier",
+				"",
+				"# Training the Gradient Boosting Classifier on the Training set",
+				"classifier = GradientBoostingClassifier()",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a Gradient Boosting Classifier"
+		},
+		"AdaBoost Classifier": {
+			"prefix": "adaboost_classifier",
+			"body": [
+				"from sklearn.ensemble import AdaBoostClassifier",
+				"from sklearn.tree import DecisionTreeClassifier",
+				"",
+				"# Training the AdaBoost Classifier on the Training set",
+				"classifier = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=50)",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train an AdaBoost Classifier"
+		},
+		"Extra Trees Classifier": {
+			"prefix": "extra_trees_classifier",
+			"body": [
+				"from sklearn.ensemble import ExtraTreesClassifier",
+				"",
+				"# Training the Extra Trees Classifier on the Training set",
+				"classifier = ExtraTreesClassifier(n_estimators=100, random_state=0)",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train an Extra Trees Classifier"
+		},
+		"Linear Discriminant Analysis (LDA)": {
+			"prefix": "lda",
+			"body": [
+				"from sklearn.discriminant_analysis import LinearDiscriminantAnalysis",
+				"",
+				"# Training the Linear Discriminant Analysis classifier on the Training set",
+				"classifier = LinearDiscriminantAnalysis()",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a Linear Discriminant Analysis classifier"
+		},
+		"Quadratic Discriminant Analysis (QDA)": {
+			"prefix": "qda",
+			"body": [
+				"from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis",
+				"",
+				"# Training the Quadratic Discriminant Analysis classifier on the Training set",
+				"classifier = QuadraticDiscriminantAnalysis()",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a Quadratic Discriminant Analysis classifier"
+		},
+		"XGBoost Classifier": {
+			"prefix": "xgboost_classifier",
+			"body": [
+				"from xgboost import XGBClassifier",
+				"",
+				"# Training the XGBoost Classifier on the Training set",
+				"classifier = XGBClassifier()",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train an XGBoost Classifier"
+		},
+		"LightGBM Classifier": {
+			"prefix": "lightgbm_classifier",
+			"body": [
+				"import lightgbm as lgb",
+				"",
+				"# Training the LightGBM Classifier on the Training set",
+				"classifier = lgb.LGBMClassifier()",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a LightGBM Classifier"
+		},
+		"CatBoost Classifier": {
+			"prefix": "catboost_classifier",
+			"body": [
+				"from catboost import CatBoostClassifier",
+				"",
+				"# Training the CatBoost Classifier on the Training set",
+				"classifier = CatBoostClassifier()",
+				"classifier.fit(X_train, y_train)"
+			],
+			"description": "Train a CatBoost Classifier"
+		}
+	}
+}
